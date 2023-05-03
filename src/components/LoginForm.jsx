@@ -1,8 +1,10 @@
 import React from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { urlApi } from '../helpers/urlApi';
 
 export default function LoginForm() {
     const navigate = useNavigate();
@@ -21,9 +23,11 @@ export default function LoginForm() {
         resolver: zodResolver(schema) 
     });
 
-    const submitForm = (data) => {
-        navigate('/deu-certo')
-        console.log('worked', data);
+    const submitForm = async(data) => {
+        const check = await axios.post(`${urlApi}user/login`, data);
+        if (check.data.token) {
+            localStorage.setItem('token', check.data.token);
+        };
     };
 
   return (
@@ -37,7 +41,7 @@ export default function LoginForm() {
             <input type="password" {...register('password')} />
             {errors.password && <span>{errors.password.message}</span> }
 
-            <input type="submit" /> Login
+            <button type="submit">Register</button>
         </form>
     </div>
   )
