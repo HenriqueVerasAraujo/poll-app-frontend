@@ -4,6 +4,7 @@ import './App.css';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import UserPage from './pages/UserPage';
+import SinglePollPage from './pages/SinglePollPage';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
     <Route exact path="/login" element={ <LoginPage /> } />
     <Route exact path="/register" element={ <RegisterPage /> } />
     <Route exact path="/user" element={ <UserPage/> } />
+    <Route exact path="/poll/:id" element={ <SinglePollPage/> } />
   </Routes>
  </BrowserRouter>
   );
