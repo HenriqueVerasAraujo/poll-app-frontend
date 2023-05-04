@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import NewPollForm from '../components/NewPollForm';
+
 
 
 export default function UserPage() {
+    const [showForm, setShowForm] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -13,6 +16,13 @@ export default function UserPage() {
     }, []);
 
   return (
-    <div>UserPage</div>
+    <div>
+      <button onClick={ () => setShowForm(true) }>New Poll</button>
+      {showForm &&
+        <div>
+          <NewPollForm />
+        </div>
+      }
+    </div>
   )
 };

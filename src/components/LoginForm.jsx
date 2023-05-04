@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
@@ -6,8 +6,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { urlApi } from '../helpers/urlApi';
 
+
 export default function LoginForm() {
     const navigate = useNavigate();
+    const [errMessage, setErrMessage] = useState('');
 
     const schema = z
     .object({
@@ -24,9 +26,13 @@ export default function LoginForm() {
     });
 
     const submitForm = async(data) => {
+        setErrMessage('');
         const check = await axios.post(`${urlApi}user/login`, data);
         if (check.data.token) {
             localStorage.setItem('token', check.data.token);
+            navigate('/user');
+        } else{
+            setErrMessage(check.data.errMessage);
         };
     };
 
@@ -40,8 +46,10 @@ export default function LoginForm() {
             <label>Password: </label>
             <input type="password" {...register('password')} />
             {errors.password && <span>{errors.password.message}</span> }
-
-            <button type="submit">Register</button>
+            {errMessage !== '' && 
+                <h1>{errMessage}</h1>
+            }
+            <button type="submit">Login</button>
         </form>
     </div>
   )
