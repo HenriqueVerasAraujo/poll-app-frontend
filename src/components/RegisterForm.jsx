@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,6 +8,9 @@ import { urlApi } from '../helpers/urlApi';
 
 export default function RegisterForm() {
     const navigate = useNavigate();
+
+    const [errMessage, setErrMessage] = useState('');
+    const [renderMessage, setRenderMessage] = useState(false);
 
     const schema = z
     .object({
@@ -25,8 +28,15 @@ export default function RegisterForm() {
     });
 
     const submitForm = async(data) => {
+        setRenderMessage(false);
+        setErrMessage('');
         const check = await axios.post(`${urlApi}user/create`, data)
         console.log(check.data);
+        if (check.data.message) {
+            setRenderMessage(true);
+        } else {
+            setErrMessage(check.data.errMessage);
+        };
     };
 
   return (
@@ -43,9 +53,15 @@ export default function RegisterForm() {
             <label>Password: </label>
             <input type="password" {...register('password')} />
             {errors.password && <span>{errors.password.message}</span> }
+            {errMessage !== '' && 
+                <h1>{errMessage}</h1>
+            }
 
             <button type="submit">Register</button>
         </form>
+        {renderMessage && (
+            <h1>Account created!</h1>
+        )}
     </div>
   )
 };
