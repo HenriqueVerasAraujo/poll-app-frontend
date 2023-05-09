@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function SingleItem() {
+export default function SingleItem({ itemTitle }) {
   return (
     <div>
-        <button>OK</button>
+        <h1>{ itemTitle }</h1>
     </div>
   )
 };

@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { urlApi } from '../helpers/urlApi';
+import SingleItem from './common/SingleItem';
 
 
 export default function NewPollForm() {
   const navigate = useNavigate();
 
     const [errMessage, setErrMessage] = useState('');
+    const [errItem, setErrItem] = useState('');
     const [renderErr, setRenderErr] = useState(false);
     const [pollTitle, setPollTitle] = useState('');
     const [pollItem, setPollItem] = useState('');
@@ -15,17 +17,6 @@ export default function NewPollForm() {
     const [itemsList, setItemsList] = useState([]);
     const [renderMessage, setRenderMessage] = useState(false);
 
-//   const submitForm = async(data) => {
-//     setRenderMessage(false);
-//     setErrMessage('');
-//     const check = await axios.post(`${urlApi}user/create`, data)
-//     console.log(check.data);
-//     if (check.data.message) {
-//         setRenderMessage(true);
-//     } else {
-//         setErrMessage(check.data.errMessage);
-//     };
-// };
 const pollQuestionHandler = ({ target }) => {
   setPollTitle(target.value);
 };
@@ -49,6 +40,10 @@ const verifyForm = () => {
 };
 
 const doneVoteOption = () => {
+  setErrItem('');
+  if (pollItem.length <= 0) {
+    return setErrItem('This field must be filled.');
+  }
   setItemsList([...itemsList, { itemTitle: pollItem }]);
   setPollItem('');
   setCheckPollItem(false);
@@ -71,7 +66,8 @@ const createPollFunction = async(event) => {
     data,
     {headers: { Authorization: localStorage.getItem('token') } }
   );
-  return setRenderMessage(true);
+  setRenderMessage(true);
+  window.location.reload();
 };
 
   return (
@@ -88,7 +84,7 @@ const createPollFunction = async(event) => {
          <h1>Vote options:</h1>
          {itemsList.length !== 0 && itemsList.map((singleItem) => (
           <div>
-            <h1>{singleItem.itemTitle}</h1>
+            <SingleItem itemTitle={singleItem.itemTitle}/>
           </div>
          ))}
          {checkPollItem && (
@@ -101,6 +97,9 @@ const createPollFunction = async(event) => {
             <button
             onClick={doneVoteOption}
             >Create
+            {errItem !== '' && (
+              <h1>{errItem}</h1>
+            )}
             </button>
           </div>
          )}
