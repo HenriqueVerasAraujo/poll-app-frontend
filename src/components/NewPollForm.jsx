@@ -55,12 +55,22 @@ const doneVoteOption = () => {
 };
 
 const createPollFunction = async(event) => {
-  setRenderErr(false);
   event.preventDefault();
+  setRenderErr(false);
   const verify = verifyForm();
   if (!verify) {
     return setRenderErr(true);
   };
+  const data = {
+    pollTitle,
+    items: itemsList
+  };
+
+  await axios.post(
+    `${urlApi}poll/create/`,
+    data,
+    {headers: { Authorization: localStorage.getItem('token') } }
+  );
   return setRenderMessage(true);
 };
 
