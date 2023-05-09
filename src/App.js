@@ -12,7 +12,7 @@ function App() {
   <Routes>
     <Route exact path="/login" element={ <LoginPage /> } />
     <Route exact path="/register" element={ <RegisterPage /> } />
-    <Route exact path="/user" element={ <UserPage/> } />
+    <Route exact path="/user/:id" element={ <UserPage/> } />
     <Route exact path="/poll/:id" element={ <SinglePollPage/> } />
   </Routes>
  </BrowserRouter>
