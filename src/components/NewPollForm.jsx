@@ -8,6 +8,7 @@ export default function NewPollForm() {
   const navigate = useNavigate();
 
     const [errMessage, setErrMessage] = useState('');
+    const [renderErr, setRenderErr] = useState(false);
     const [pollTitle, setPollTitle] = useState('');
     const [pollItem, setPollItem] = useState('');
     const [checkPollItem, setCheckPollItem] = useState(false);
@@ -33,28 +34,36 @@ const pollItemHandler = ({ target }) => {
   setPollItem(target.value);
 };
 
-// const verifyForm = () => {
-//   setErrMessage('');
-//   if (pollTitle.length < 1) {
-//     setErrMessage('Your Poll Question must be at least 2 characters long.')
-//   }
-// };
+const verifyForm = () => {
+  setErrMessage('');
+  if (pollTitle.length <= 1) {
+    setErrMessage('Your Poll Question must be at least 2 characters long.');
+    return false;
+  };
 
-const createNewVoteOption = () => {
-  setCheckPollItem(true);
-  console.log('ativo');
-}
+  if (itemsList.length <= 1) {
+    setErrMessage('Your Poll must have at least 2 vote options.');
+    return false;
+  };
+  return true;
+};
 
 const doneVoteOption = () => {
-  
-  setItemsList([...itemsList, pollItem]);
+  setItemsList([...itemsList, { itemTitle: pollItem }]);
   setPollItem('');
   setCheckPollItem(false);
 };
 
 const createPollFunction = async(event) => {
+  setRenderErr(false);
   event.preventDefault();
-}
+  const verify = verifyForm();
+  if (!verify) {
+    return setRenderErr(true);
+  };
+  return setRenderMessage(true);
+};
+
   return (
     <div className=''>
         <form 
@@ -69,7 +78,7 @@ const createPollFunction = async(event) => {
          <h1>Vote options:</h1>
          {itemsList.length !== 0 && itemsList.map((singleItem) => (
           <div>
-            <h1>{singleItem}</h1>
+            <h1>{singleItem.itemTitle}</h1>
           </div>
          ))}
          {checkPollItem && (
@@ -86,14 +95,14 @@ const createPollFunction = async(event) => {
           </div>
          )}
          <button
-         onClick={createNewVoteOption}
+         onClick={() => setCheckPollItem(true)}
          disabled={checkPollItem}
          >Create a new Vote Option</button>
-            {errMessage !== '' && 
-                <h1>{errMessage}</h1>
-            }
             <button type="submit">Create Poll</button>
         </form>
+        {renderErr && (
+            <h1>{errMessage}</h1>
+        )}
         {renderMessage && (
             <h1>Poll Created!</h1>
         )}
