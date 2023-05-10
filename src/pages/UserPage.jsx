@@ -21,15 +21,14 @@ export default function UserPage() {
     useEffect(() => {
         const checkToken = localStorage.getItem('token');
         if (!checkToken) {
-           navigate('/login');
+          //  navigate('/login');
         } else {
           fetchAllPolls();
         };
     }, []);
 
     useEffect(() => {
-      if (pollsInfo !== []) {
-        console.log(pollsInfo)
+      if (pollsInfo.length !== 0 ) {
         setRender(true);
       }
     }, [pollsInfo]);
@@ -42,12 +41,13 @@ export default function UserPage() {
       ):(
         <h1>You don't have any polls yet.</h1>
       )}
-      <button onClick={ () => setShowForm(true) }>New Poll</button>
-      {showForm &&
+      <button type='button' onClick={ () => setShowForm(true) }>New Poll</button>
+        {showForm && (
         <div>
           <NewPollForm />
         </div>
-      }
+        )}
+
     </div>
   )
 };

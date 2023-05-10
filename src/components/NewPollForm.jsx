@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { urlApi } from '../helpers/urlApi';
 import SingleItem from './common/SingleItem';
 
 
 export default function NewPollForm() {
-  const navigate = useNavigate();
 
     const [errMessage, setErrMessage] = useState('');
     const [errItem, setErrItem] = useState('');
@@ -16,6 +14,9 @@ export default function NewPollForm() {
     const [checkPollItem, setCheckPollItem] = useState(false);
     const [itemsList, setItemsList] = useState([]);
     const [renderMessage, setRenderMessage] = useState(false);
+    const [itemId, setItemId] = useState(0);
+
+
 
 const pollQuestionHandler = ({ target }) => {
   setPollTitle(target.value);
@@ -44,7 +45,8 @@ const doneVoteOption = () => {
   if (pollItem.length <= 0) {
     return setErrItem('This field must be filled.');
   }
-  setItemsList([...itemsList, { itemTitle: pollItem }]);
+  setItemsList([...itemsList, { itemTitle: pollItem, itemId }]);
+  setItemId(prev => prev + 1);
   setPollItem('');
   setCheckPollItem(false);
 };
@@ -70,11 +72,11 @@ const createPollFunction = async(event) => {
   window.location.reload();
 };
 
+
   return (
     <div className=''>
         <form 
         className='flex flex-col'
-        onSubmit={createPollFunction}
         >
             <label>Poll Question: </label>
             <input 
@@ -84,11 +86,15 @@ const createPollFunction = async(event) => {
          <h1>Vote options:</h1>
          {itemsList.length !== 0 && itemsList.map((singleItem) => (
           <div>
+            {/* <h1>{ singleItem.itemTitle }</h1>
+            <button type='button' onClick={editButtonFunction}>Edit</button>
+            <button type='button' onClick={ () => deleteButtonFunction(singleItem.itemTitle)}>Delete</button> */}
             <SingleItem
-            itemTitle={singleItem.itemTitle}
+            itemInfo={singleItem}
             itemsList={itemsList}
             setItemsList={setItemsList}
             />
+
           </div>
          ))}
          {checkPollItem && (
@@ -100,6 +106,7 @@ const createPollFunction = async(event) => {
             />
             <button
             onClick={doneVoteOption}
+            type='button'
             >Create
             {errItem !== '' && (
               <h1>{errItem}</h1>
@@ -107,11 +114,13 @@ const createPollFunction = async(event) => {
             </button>
           </div>
          )}
+
          <button
          onClick={() => setCheckPollItem(true)}
          disabled={checkPollItem}
          >Create a new Vote Option</button>
-            <button type="submit">Create Poll</button>
+
+          <button className='mt-10 bg-green-700' onClick={createPollFunction} type="button">Create Poll</button>
         </form>
         {renderErr && (
             <h1>{errMessage}</h1>
