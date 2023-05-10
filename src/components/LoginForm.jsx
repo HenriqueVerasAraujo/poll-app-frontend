@@ -30,6 +30,7 @@ export default function LoginForm() {
         const check = await axios.post(`${urlApi}user/login`, data);
         if (check.data.token) {
             localStorage.setItem('token', check.data.token);
+            localStorage.setItem('userId', check.data.userId);
             navigate('/user');
         } else{
             setErrMessage(check.data.errMessage);
