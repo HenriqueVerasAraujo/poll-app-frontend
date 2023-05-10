@@ -84,7 +84,11 @@ const createPollFunction = async(event) => {
          <h1>Vote options:</h1>
          {itemsList.length !== 0 && itemsList.map((singleItem) => (
           <div>
-            <SingleItem itemTitle={singleItem.itemTitle}/>
+            <SingleItem
+            itemTitle={singleItem.itemTitle}
+            itemsList={itemsList}
+            setItemsList={setItemsList}
+            />
           </div>
          ))}
          {checkPollItem && (
