@@ -1,34 +1,47 @@
 import React, { useState, useEffect } from 'react'
 import SinglePoll from './common/SinglePoll';
+import { urlApi } from '../helpers/urlApi';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-export default function AllPollsSection({ pollsInfo }) {
+export default function AllPollsSection() {
   const [renderButton, setRenderButton] = useState(false);
+  const [render, setRender] = useState(false);
+  const [pollsInfo, setPollsInfo] = useState([]);
+  const navigate = useNavigate();
+
+  const fetchAllPolls = async () => {
+    const allPolls = await axios
+      .get(`${urlApi}poll/getall/`,
+      {headers: { Authorization: localStorage.getItem('token') } });
+      setPollsInfo(allPolls.data);
+  };
 
   useEffect(() => {
-    verifyUserId();
-  }, []);
-  
-  const verifyUserId = () => {
-    const userIdFromLocal = localStorage.getItem('userId');
-    if (!userIdFromLocal) {
-      return setRenderButton(false);
-    };
-    if (userIdFromLocal === pollsInfo.userId) {
-      setRenderButton(true);
+    const checkToken = localStorage.getItem('token');
+    if (!checkToken) {
+        navigate('/login');
     } else {
-      setRenderButton(false);
+      fetchAllPolls();
     };
-  };
+  }, []);
+
+  useEffect(() => {
+    if (pollsInfo.length !== 0 ) {
+      setRender(true);
+    }
+  }, [pollsInfo]);
 
   return (
     <div>
-        {pollsInfo.map((singlePoll) => (
-            <div>
-              <SinglePoll pollInfo={singlePoll} />
-                <h1>{singlePoll.pollTitle}</h1>
-                <h1>{singlePoll.createdAt}</h1>
-            </div>
-        ))}
+      {render ? (pollsInfo.map((singlePoll) => (
+        <SinglePoll pollInfo={singlePoll}/>
+      ))
+      ) : (
+        <div>
+            <h1>You don't have any polls yet.</h1>
+        </div>
+      )}
     </div>
   )
 };
