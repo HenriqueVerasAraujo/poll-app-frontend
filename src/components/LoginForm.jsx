@@ -38,7 +38,7 @@ export default function LoginForm() {
     };
 
   return (
-    <div className=''>
+    <div className='pt-[70px] md:pt-[60px] z-0'>
         <form className='flex flex-col' onSubmit={handleSubmit(submitForm)}>
             <label>Email: </label>
             <input type="email" {...register('email')} />

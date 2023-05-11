@@ -7,6 +7,7 @@ export default function Navbar() {
     const [loggedIn, setLoggedIn] = useState(false);
 
     const navigate = useNavigate();
+    
 
     const buttonsFree = [
         {name:'Register', to: '/register'},
@@ -29,6 +30,16 @@ export default function Navbar() {
         }
     };
 
+    const openNavFunction = () => {
+        document.body.style.overflow = "hidden"
+        setOpenNav(true);
+    }
+
+    const closeNavFunction = () => {
+        setOpenNav(false);
+        document.body.style.overflow = "scroll"
+    }
+
     useEffect(() => {
         verifyLogin();
     }, []);
@@ -36,7 +47,7 @@ export default function Navbar() {
   return (
     <div className='w-full h-auto fixed top-0 left-0'>
         {/* GREEN NAVBAR */}
-        <div className='w-full h-[70px] sm:h-[60px] bg-teal-500 flex flex-col justify-center items-center sm:justify-center shadow-md z-10'>
+        <div className='w-full h-[70px] sm:h-[60px] bg-teal-500 flex flex-col justify-center absolute items-center sm:justify-center shadow-md z-10'>
             <div className='w-full h-full flex items-center relative sm:justify-between'>
                 {/* SITE NAME */}
                 <div className='w-full h-full sm:w-auto sm:pl-10 flex items-center justify-center'>
@@ -44,10 +55,10 @@ export default function Navbar() {
                 </div>
                 {/* HAMBUGER MENU BUTTONS */}
                 <div className='text-2xl flex items-center sm:hidden absolute right-5'>
-                    {openNav ? (
-                        <button onClick={() => setOpenNav(!openNav)}>{menuIcon}</button>
+                    {!openNav ? (
+                        <button onClick={openNavFunction}>{menuIcon}</button>
                     ) : (
-                        <button onClick={() => setOpenNav(!openNav)}>{closeIcon}</button>
+                        <button onClick={closeNavFunction}>{closeIcon}</button>
                     )}
                 </div>
                 {/* NAV BUTTONS BIG SCREEN */}
@@ -68,8 +79,10 @@ export default function Navbar() {
                 </div>
             </div>
         </div>
+        {/* BLACKOUT DIV */}
+        <div onClick={closeNavFunction} className={`bg-black opacity-70 fixed w-screen h-screen z-[-2] ${!openNav && 'opacity-0'} duration-300`}></div>
         {/* NAV BUTTONS SMALL SCREEN */}
-            <div className={`w-full h-auto bg-slate-200 sm:hidden absolute ${openNav ? '-top-[200px]' : 'top-[70px]' } duration-500 z-[-1]`}> 
+            <div className={`w-full h-auto bg-slate-200 sm:hidden absolute ${!openNav ? '-top-[200px]' : 'top-[70px]'} duration-300 ease-out z-0`}> 
                 {loggedIn ? (
                 buttonsAccount.map((singleButton) => (
                     <div className='w-auto h-auto p-3 pl-5 text-xl font-bold text-gray-600'>
@@ -84,6 +97,7 @@ export default function Navbar() {
                 ))
             )}
             </div>
+            
     </div>
   )
 };
