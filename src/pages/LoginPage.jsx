@@ -8,7 +8,7 @@ export default function MainPage() {
     className='w-full h-screen bg-slate-300'
     >
       <Navbar />
-      {/* <LoginForm /> */}
+      <LoginForm />
       </div>
   )
 }
