@@ -80,7 +80,7 @@ export default function Navbar() {
             </div>
         </div>
         {/* BLACKOUT DIV */}
-        <div onClick={closeNavFunction} className={`bg-black opacity-70 fixed w-screen h-screen z-[-2] ${!openNav && 'opacity-0'} duration-300`}></div>
+        <div onClick={closeNavFunction} className={`bg-black opacity-70 fixed w-screen h-screen z-[-2] ${!openNav && 'opacity-0 pointer-events-none'} duration-300`}></div>
         {/* NAV BUTTONS SMALL SCREEN */}
             <div className={`w-full h-auto bg-slate-200 sm:hidden absolute ${!openNav ? '-top-[200px]' : 'top-[70px]'} duration-300 ease-out z-0`}> 
                 {loggedIn ? (
