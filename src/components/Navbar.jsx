@@ -62,16 +62,16 @@ export default function Navbar() {
                     )}
                 </div>
                 {/* NAV BUTTONS BIG SCREEN */}
-                <div className='hidden sm:w-auto sm:h-auto sm:flex pr-10 text-2xl text-white font-bold'>
+                <div className='hidden sm:w-auto sm:h-auto sm:flex pr-10 text-2xl text-white font-bold '>
                     {loggedIn ? (
                         buttonsAccount.map((singleButton) => (
-                            <div className='w-auto h-auto pl-7'>
+                            <div className='w-auto h-auto pl-7 hover:text-teal-900'>
                                 <button type='button' onClick={() => navigate(`${singleButton.to}`)}>{singleButton.name}</button>
                             </div>
                         ))
                     ):(
                         buttonsFree.map((singleButton) => (
-                            <div>
+                            <div className='w-auto h-auto pl-7'>
                                 <button type='button' onCLick={() => navigate(`${singleButton.to}`)}>{singleButton.name}</button>
                             </div>
                         ))
