@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { urlApi } from '../helpers/urlApi';
 import { logoIcon } from '../icons/icons';
+import SubmitButton from './common/SubmitButton';
 import AOS from 'aos';
 import 'aos/dist/aos.css'
 
@@ -32,7 +33,7 @@ export default function RegisterForm() {
 
     useEffect(() => {
         AOS.init({duration: 1300});
-    }, [])
+    }, []);
 
     const submitForm = async(data) => {
         setRenderMessage(false);
@@ -47,11 +48,11 @@ export default function RegisterForm() {
     };
 
   return (
-    <div className='w-full h-screen bg-slate-300'>
+    <div className='w-full h-screen bg-slate-100'>
         {/* SMALL SCREEN COMPONENT */}
-        <div className='w-full h-screen bg-slate-300 flex flex-col md:hidden'>
+        <div className='w-full h-auto bg-slate-100 flex flex-col md:hidden'>
             {/* GREEN PART */}
-            <div className='w-full h-[35%] bg-teal-500 flex flex-col justify-center items-center'>
+            <div className='w-full h-[310px] bg-teal-500 flex flex-col justify-center items-center'>
                 {/* TEXT AND LOGO */}
                 <div className='w-auto h-auto flex flex-col justify-center items-center absolute -mt-[80px]' data-aos="fade-down">
                     <h1 className='text-white text-2xl font-bold mb-5'>Welcome to</h1>
@@ -80,8 +81,8 @@ export default function RegisterForm() {
                         <label className='text-teal-700 mb-1 mt-3'>Password:</label>
                         <input className='rounded-md text-lg px-2 border-2 border-teal-700' type="password" {...register('password')} />
                         {errors.password && <span className='text-red-700'>{errors.password.message}</span> }
+
                         {/* LOWER PORTION */}
-                        
                         <div className='w-full h-auto flex flex-col items-center mt-4'>
                             {renderMessage && (
                                 <h1 className='text-teal-700 font-bold'>Account created!</h1>
@@ -89,7 +90,7 @@ export default function RegisterForm() {
                             {errMessage !== '' && 
                                 <h1 className='text-red-700'>{errMessage}</h1>
                             }
-                            <button className='w-[90%] h-auto p-3 bg-teal-500 text-white font-bold text-2xl rounded-md mt-3 focus:bg-white focus:border-2 focus:border-teal-500 focus:text-teal-500' type="submit">Register</button>
+                            <SubmitButton text='Register'/>
                             <h1 className='text-center mt-2'>Already have an account? <span onClick={() => navigate('/login')} className='text-teal-500'>Sign in to your account.</span></h1>
                         </div>
                     </form>
