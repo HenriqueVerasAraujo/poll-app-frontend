@@ -28,9 +28,9 @@ export default function SinglePollPage() {
         fetch.data.createdAt = dateFormat(fetch.data.createdAt);
         fetch.data.items.forEach((singleItem) => {
             if (singleItem.id === vote) {
-                singleItem.color = 'bg-teal-500';
+                singleItem.color = 'bg-teal-500 text-white';
             } else {
-                singleItem.color = 'bg-slate-300';
+                singleItem.color = 'bg-slate-300 text-gray-700';
             }
         });
         setPollInfo(fetch.data);
@@ -67,7 +67,7 @@ export default function SinglePollPage() {
             localStorage.setItem(`16uifkg${id}36e21`, JSON.stringify(0));
         } else if (Number(findPoll) !== choiceInfo.id) {
             localStorage.setItem(`16uifkg${id}36e21`, choiceInfo.id);
-        }
+        };
         await fetchPoll();
     };
 
@@ -92,35 +92,46 @@ export default function SinglePollPage() {
     <div className='w-full h-screen bg-slate-100 '>
         {/* FULL COMPONENT */}
         <Navbar />
-        <div className='w-full h-auto bg-slate-100 mt-[70px] sm:mt-[60px] flex flex-col'>
+        <div className='w-full h-auto bg-slate-100 pt-[70px] sm:pt-[60px] flex flex-col'>
             {render && (
-                <div className={`${resultButton && 'hidden'}`}>
-                    <h1>{pollInfo.pollTitle}</h1>
+                <div className={`${resultButton && 'hidden'} w-full h-auto mt-4 px-5`}>
                     <h1>{pollInfo.createdAt}</h1>
                     <h1>{pollInfo.user.username}</h1>
-                    <h1>Options:</h1>
-                { pollInfo.items.map((singleItem) => (
+                    {/* QUESTION SECTION  */}
                     <div>
-                        <button className={`${singleItem.color} w-full mb-3`} onClick={() => handleChoiceClick(singleItem)}>{singleItem.itemTitle}</button>
+                        <h1 className='text-gray-600 w-auto font-bold text-2xl mb-1'>Poll Question:</h1>
+                        <div className='w-full h-auto bg-white p-3 rounded-md'>
+                            <h1 className='text-teal-700 font-bold text-2xl'>{pollInfo.pollTitle}</h1>
+                        </div>
+
+                    </div>
+
+                    <h1 className='text-gray-600 font-bold text-2xl mb-1'>Options:</h1>
+                    {/* VOTE OPTIONS  */}
+                { pollInfo.items.map((singleItem) => (
+                    <div className=''>
+                        <button className={`${singleItem.color} w-full mb-3 px-5 break-words overflow-hidden truncate... rounded-md text-lg text-start font-bold`} onClick={() => handleChoiceClick(singleItem)}>{singleItem.itemTitle}</button>
                     </div>
                 ))}
                 </div>
             )}
             {errMessage && (
-                <div className={`${resultButton && 'hidden'}`}>
-                    <h1>Select one of the choices above and then confirm your vote.</h1>
+                <div className={`${resultButton && 'hidden'} text-center text-red-700`}>
+                    <h1>Select one of the choices above</h1>
+                    <h1>and then confirm your vote.</h1>
                 </div>
             )}
             {voted ? (
-                <div className={`${resultButton && 'hidden'}`}>
-                    <h1>Thank you for your vote!</h1>
-                    <VoteButton func={handleResultButton} text={'Poll results'}/>
+                <div className={`${resultButton && 'hidden'} w-full h-auto flex flex-col items-center justify-center`}>
+                    <h1 className='font-bold text-teal-600'>Thank you for your vote!</h1>
+                    <VoteButton func={handleResultButton} text={'Results'}/>
                 </div>
             ) : (
-                <div>
+                <div className='w-full h-auto flex flex-col items-center justify-center'>
                     <VoteButton func={handleConfirmVote} text={'Confirm Vote'}/>
                 </div>
             )}
+            <h1 className='text-center mt-2'>Want to create your own Poll? <span onClick={() => navigate('/register')} className='text-teal-500'>Sign up now.</span></h1>
         </div>
     </div>
   )
