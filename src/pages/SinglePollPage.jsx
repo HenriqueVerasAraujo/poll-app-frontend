@@ -5,6 +5,9 @@ import { urlApi } from '../helpers/urlApi';
 import Navbar from '../components/Navbar'
 import VoteButton from '../components/common/VoteButton';
 import moment from 'moment';
+import AOS from 'aos';
+import 'aos/dist/aos.css'
+
 
 export default function SinglePollPage() {
     const { id } = useParams();
@@ -13,6 +16,7 @@ export default function SinglePollPage() {
     const [voted, setVoted] = useState(false);
     const [resultButton, setResultButton] = useState(false);
     const [errMessage, setErrMessage] = useState(false);
+    const [pollStatus, setPollStatus] = useState(false);
     const navigate = useNavigate();
 
     const dateFormat = (date) => {
@@ -33,6 +37,10 @@ export default function SinglePollPage() {
                 singleItem.color = 'bg-slate-300 text-gray-700';
             }
         });
+        if(fetch.data.pollStatus === 2) {
+            setPollStatus(true);
+            setVoted(true);
+        };
         setPollInfo(fetch.data);
     };
 
@@ -51,7 +59,6 @@ export default function SinglePollPage() {
 
     useEffect(() => {
         if(pollInfo.items) {
-            setRender(false);  
             setRender(true);  
         };
     }, [pollInfo]);
@@ -94,36 +101,51 @@ export default function SinglePollPage() {
         <Navbar />
         <div className='w-full h-auto bg-slate-100 pt-[70px] sm:pt-[60px] flex flex-col'>
             {render && (
-                <div className={`${resultButton && 'hidden'} w-full h-auto mt-4 px-5`}>
-                    <h1>{pollInfo.createdAt}</h1>
-                    <h1>{pollInfo.user.username}</h1>
+                <div className={`w-full h-auto mt-7 px-5`}>
+                    {/* CREATED BY AREA */}
+                    <div className='text-2xl font-bold'>
+                        <h1 className='text-gray-600 break-words text-center'>This Poll was created by: <span className='text-teal-700 break-words' >{pollInfo.user.username}</span></h1>
+                    </div>
+                    {/* POLL STATUS AREA */}
+                    <div className='w-full h-auto flex flex-col justify-center items-center mt-4'>
+                        <h1 className='text-gray-600 text-2xl font-bold'>Poll Status: </h1> 
+                    {pollStatus ? (
+                        <div className=''>
+                            <h1 className='text-2xl text-red-600 font-bold'>This Poll has ended.</h1>
+                        </div>
+                        ) : (
+                        <h1 className=' text-2xl text-teal-600 font-bold'>This Poll is open to vote.</h1>
+                        )}
+                    </div>
                     {/* QUESTION SECTION  */}
-                    <div>
+                    <div className='mt-5'>
                         <h1 className='text-gray-600 w-auto font-bold text-2xl mb-1'>Poll Question:</h1>
                         <div className='w-full h-auto bg-white p-3 rounded-md'>
                             <h1 className='text-teal-700 font-bold text-2xl'>{pollInfo.pollTitle}</h1>
                         </div>
-
                     </div>
-
-                    <h1 className='text-gray-600 font-bold text-2xl mb-1'>Options:</h1>
                     {/* VOTE OPTIONS  */}
-                { pollInfo.items.map((singleItem) => (
-                    <div className=''>
-                        <button className={`${singleItem.color} w-full mb-3 px-5 break-words overflow-hidden truncate... rounded-md text-lg text-start font-bold`} onClick={() => handleChoiceClick(singleItem)}>{singleItem.itemTitle}</button>
+                    <div className={`${resultButton && 'hidden'}`}> 
+                        <h1 className='text-gray-600 font-bold text-2xl mt-5 mb-2'>Vote Options:</h1>
+                    { pollInfo.items.map((singleItem) => (
+                        <div className=''>
+                            <button className={`${singleItem.color} w-full mb-3 px-5 py-2 break-words overflow-hidden truncate... rounded-md text-lg text-start font-bold`} onClick={() => handleChoiceClick(singleItem)}>{singleItem.itemTitle}</button>
+                        </div>
+                    ))}
                     </div>
-                ))}
                 </div>
             )}
             {errMessage && (
                 <div className={`${resultButton && 'hidden'} text-center text-red-700`}>
-                    <h1>Select one of the choices above</h1>
+                    <h1>Select one of the options above</h1>
                     <h1>and then confirm your vote.</h1>
                 </div>
             )}
             {voted ? (
                 <div className={`${resultButton && 'hidden'} w-full h-auto flex flex-col items-center justify-center`}>
-                    <h1 className='font-bold text-teal-600'>Thank you for your vote!</h1>
+                    {!pollStatus && (
+                        <h1 className='font-bold text-teal-600'>Thank you for your vote!</h1>
+                    )}
                     <VoteButton func={handleResultButton} text={'Results'}/>
                 </div>
             ) : (
@@ -131,7 +153,7 @@ export default function SinglePollPage() {
                     <VoteButton func={handleConfirmVote} text={'Confirm Vote'}/>
                 </div>
             )}
-            <h1 className='text-center mt-2'>Want to create your own Poll? <span onClick={() => navigate('/register')} className='text-teal-500'>Sign up now.</span></h1>
+            <h1 className='text-center mt-2 pb-5'>Want to create your own Poll? <span onClick={() => navigate('/register')} className='text-teal-500'>Sign up now.</span></h1>
         </div>
     </div>
   )
