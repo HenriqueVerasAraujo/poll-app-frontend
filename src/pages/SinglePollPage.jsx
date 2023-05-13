@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { urlApi } from '../helpers/urlApi';
 import Navbar from '../components/Navbar'
 import VoteButton from '../components/common/VoteButton';
+import moment from 'moment';
 
 export default function SinglePollPage() {
     const { id } = useParams();
@@ -12,10 +13,19 @@ export default function SinglePollPage() {
     const [voted, setVoted] = useState(false);
     const [resultButton, setResultButton] = useState(false);
     const [errMessage, setErrMessage] = useState(false);
+    const navigate = useNavigate();
 
+    const dateFormat = (date) => {
+        return moment(date).format('DD-MM-YYYY HH:mm');
+    };
+    
     const fetchPoll = async() => {
         const fetch = await axios.get(`${urlApi}poll/getOne/${id}`);
+        if(fetch.data.errMessage) {
+            return navigate('/register');
+        }
         const vote = JSON.parse(localStorage.getItem(`16uifkg${id}36e21`));
+        fetch.data.createdAt = dateFormat(fetch.data.createdAt);
         fetch.data.items.forEach((singleItem) => {
             if (singleItem.id === vote) {
                 singleItem.color = 'bg-teal-500';
@@ -58,18 +68,7 @@ export default function SinglePollPage() {
         } else if (Number(findPoll) !== choiceInfo.id) {
             localStorage.setItem(`16uifkg${id}36e21`, choiceInfo.id);
         }
-
-        const fetch = await axios.get(`${urlApi}poll/getOne/${id}`);
-        const vote = JSON.parse(localStorage.getItem(`16uifkg${id}36e21`));
-            fetch.data.items.forEach((singleItem) => {
-                if (singleItem.id === Number(vote)) {
-                    singleItem.color = 'bg-teal-500';
-                } else {
-                    singleItem.color = 'bg-slate-300';
-                }
-            });
-
-            setPollInfo(fetch.data);
+        await fetchPoll();
     };
 
     const handleConfirmVote = async() => {
@@ -84,24 +83,10 @@ export default function SinglePollPage() {
         }
     };
 
-    // const handleChoiceClick = async(choiceInfo) => {
-    //     const findPoll = localStorage.getItem(`16uifkg${id}36e21`)
-    //     if (findPoll === '0') {
-    //         localStorage.setItem(`16uifkg${id}36e21`, choiceInfo.id);
-    //         await axios.put(`${urlApi}item/add/${choiceInfo.id}`);
-    //         return ''
-    //     };
-    //     if (Number(findPoll) === choiceInfo.id) {
-    //         await axios.put(`${urlApi}item/remove/${findPoll}`);
-    //         localStorage.setItem(`16uifkg${id}36e21`, JSON.stringify(0));
-    //         return ''
-    //     } else {
-    //         await axios.put(`${urlApi}item/remove/${findPoll}`);
-    //         localStorage.setItem(`16uifkg${id}36e21`, choiceInfo.id);
-    //         await axios.put(`${urlApi}item/add/${choiceInfo.id}`);
-    //         return '' 
-    //     } 
-    // };
+    const handleResultButton = async() => {
+        await fetchPoll();
+        setResultButton(true);
+    };
 
   return (
     <div className='w-full h-screen bg-slate-100 '>
@@ -109,7 +94,7 @@ export default function SinglePollPage() {
         <Navbar />
         <div className='w-full h-auto bg-slate-100 mt-[70px] sm:mt-[60px] flex flex-col'>
             {render && (
-                <div>
+                <div className={`${resultButton && 'hidden'}`}>
                     <h1>{pollInfo.pollTitle}</h1>
                     <h1>{pollInfo.createdAt}</h1>
                     <h1>{pollInfo.user.username}</h1>
@@ -122,14 +107,14 @@ export default function SinglePollPage() {
                 </div>
             )}
             {errMessage && (
-                <div>
+                <div className={`${resultButton && 'hidden'}`}>
                     <h1>Select one of the choices above and then confirm your vote.</h1>
                 </div>
             )}
             {voted ? (
-                <div>
+                <div className={`${resultButton && 'hidden'}`}>
                     <h1>Thank you for your vote!</h1>
-                    <VoteButton func={''} text={'Poll results'}/>
+                    <VoteButton func={handleResultButton} text={'Poll results'}/>
                 </div>
             ) : (
                 <div>
