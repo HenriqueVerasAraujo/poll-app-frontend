@@ -43,7 +43,6 @@ export default function UserPage() {
           <NewPollForm />
         </div>
         )}
-
     </div>
   )
 };

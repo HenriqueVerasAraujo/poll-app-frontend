@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 export default function Navbar() {
     const [openNav, setOpenNav] = useState(false);
     const [loggedIn, setLoggedIn] = useState(false);
+    const [renderBlack, setRenderBlack] = useState(false);
 
     const navigate = useNavigate();
     
-
     const buttonsFree = [
         {name:'Register', to: '/register'},
         {name:'Login', to: '/login'},
@@ -31,14 +31,16 @@ export default function Navbar() {
     };
 
     const openNavFunction = () => {
-        document.body.style.overflow = "hidden"
+        setRenderBlack(true);
         setOpenNav(true);
-    }
+        document.body.style.overflow = "hidden"
+    };
 
     const closeNavFunction = () => {
+        setRenderBlack(false);
         setOpenNav(false);
         document.body.style.overflow = "scroll"
-    }
+    };
 
     useEffect(() => {
         verifyLogin();
@@ -72,7 +74,7 @@ export default function Navbar() {
                     ):(
                         buttonsFree.map((singleButton) => (
                             <div className='w-auto h-auto pl-7'>
-                                <button type='button' onCLick={() => navigate(`${singleButton.to}`)}>{singleButton.name}</button>
+                                <button type='button' onClick={() => navigate(`${singleButton.to}`)}>{singleButton.name}</button>
                             </div>
                         ))
                     )}
@@ -80,7 +82,7 @@ export default function Navbar() {
             </div>
         </div>
         {/* BLACKOUT DIV */}
-        <div onClick={closeNavFunction} className={`bg-black opacity-70 fixed w-screen h-screen z-[-2] ${!openNav && 'opacity-0 pointer-events-none'} duration-300`}></div>
+        <div onClick={closeNavFunction} className={`bg-black fixed w-screen h-screen z-[-2] ${renderBlack ? 'opacity-70' : 'opacity-0 pointer-events-none'} duration-300 sm:hidden`}></div>
         {/* NAV BUTTONS SMALL SCREEN */}
             <div className={`w-full h-auto bg-slate-200 sm:hidden absolute ${!openNav ? '-top-[200px]' : 'top-[70px]'} duration-300 ease-out z-0`}> 
                 {loggedIn ? (
@@ -92,12 +94,11 @@ export default function Navbar() {
             ):(
                 buttonsFree.map((singleButton) => (
                     <div className='w-auto h-auto p-3 pl-5 text-xl font-bold text-gray-600'>
-                        <button type='button' onCLick={() => navigate(`${singleButton.to}`)}>{singleButton.name}</button>
+                        <button type='button' onClick={() => navigate(`${singleButton.to}`)}>{singleButton.name}</button>
                     </div>
                 ))
             )}
             </div>
-            
     </div>
   )
 };
