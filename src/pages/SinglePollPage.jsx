@@ -5,9 +5,6 @@ import { urlApi } from '../helpers/urlApi';
 import Navbar from '../components/Navbar'
 import VoteButton from '../components/common/VoteButton';
 import moment from 'moment';
-import AOS from 'aos';
-import 'aos/dist/aos.css'
-
 
 export default function SinglePollPage() {
     const { id } = useParams();
@@ -25,11 +22,23 @@ export default function SinglePollPage() {
     
     const fetchPoll = async() => {
         const fetch = await axios.get(`${urlApi}poll/getOne/${id}`);
+        let totalVotes = 0;
         if(fetch.data.errMessage) {
             return navigate('/register');
         }
         const vote = JSON.parse(localStorage.getItem(`16uifkg${id}36e21`));
         fetch.data.createdAt = dateFormat(fetch.data.createdAt);
+        fetch.data.items.forEach((singleItem) => {
+          totalVotes += singleItem.votes;
+        });
+        fetch.data.totalVotes = totalVotes;
+        
+        fetch.data.items.forEach((singleItem) => {
+            let perc = (((singleItem.votes * 100) / totalVotes).toFixed(0))
+            singleItem.votePercent = `${((singleItem.votes * 100) / totalVotes).toFixed(0)}%`;
+            console.log(singleItem.votePercent);
+        });
+
         fetch.data.items.forEach((singleItem) => {
             if (singleItem.id === vote) {
                 singleItem.color = 'bg-teal-500 text-white';
@@ -41,6 +50,7 @@ export default function SinglePollPage() {
             setPollStatus(true);
             setVoted(true);
         };
+        console.log(fetch.data)
         setPollInfo(fetch.data);
     };
 
@@ -53,7 +63,6 @@ export default function SinglePollPage() {
         if(ifVoted === 1) {
             setVoted(true);
         };
-
         fetchPoll();
     }, []);
 
@@ -118,20 +127,36 @@ export default function SinglePollPage() {
                         )}
                     </div>
                     {/* QUESTION SECTION  */}
-                    <div className='mt-5'>
+                    <div className='mt-5 z-[-1] [data-aos]:pointer-events:none &.aos-animate pointer-events:auto'>
                         <h1 className='text-gray-600 w-auto font-bold text-2xl mb-1'>Poll Question:</h1>
                         <div className='w-full h-auto bg-white p-3 rounded-md'>
-                            <h1 className='text-teal-700 font-bold text-2xl'>{pollInfo.pollTitle}</h1>
+                            <h1 className='text-teal-600 font-bold text-2xl'>{pollInfo.pollTitle}</h1>
                         </div>
                     </div>
                     {/* VOTE OPTIONS  */}
-                    <div className={`${resultButton && 'hidden'}`}> 
-                        <h1 className='text-gray-600 font-bold text-2xl mt-5 mb-2'>Vote Options:</h1>
-                    { pollInfo.items.map((singleItem) => (
-                        <div className=''>
-                            <button className={`${singleItem.color} w-full mb-3 px-5 py-2 break-words overflow-hidden truncate... rounded-md text-lg text-start font-bold`} onClick={() => handleChoiceClick(singleItem)}>{singleItem.itemTitle}</button>
+                    <div> 
+                        {!resultButton ? (
+                        <div>
+                            <h1 className='text-gray-600 font-bold text-2xl mt-5 mb-2'>Vote Options:</h1>
+                            { pollInfo.items.map((singleItem) => (
+                                <div>
+                                    <button className={`${singleItem.color} w-full mb-3 px-5 py-2 break-words overflow-hidden truncate... rounded-md text-lg text-start font-bold`} onClick={() => handleChoiceClick(singleItem)}>{singleItem.itemTitle}</button>
+                                </div>
+                            ))}
                         </div>
-                    ))}
+
+                        ) : (
+                            <div>
+                            <h1 className='text-gray-600 font-bold text-2xl mt-5 mb-2'>Results:</h1>
+                            { pollInfo.items.map((singleItem) => (
+                                <div className='w-full h-auto relative'>
+                                    {/* <div className='bg-black h-auto w-full z-10 rounded-md opacity-100 absolute'></div> */}
+                                    <div className='bg-black w-full h-full absolute rounded-md' style={{width: singleItem.votePercent}}></div>
+                                    <h1 className={`${singleItem.color} w-full mb-3 px-5 py-2 overflow-hidden truncate... rounded-md text-lg text-start font-bold`}>{singleItem.votes}</h1>
+                                </div>
+                            ))}
+                        </div>
+                        )}
                     </div>
                 </div>
             )}
