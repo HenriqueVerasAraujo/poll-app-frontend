@@ -5,6 +5,10 @@ import { urlApi } from '../helpers/urlApi';
 import Navbar from '../components/Navbar'
 import VoteButton from '../components/common/VoteButton';
 import moment from 'moment';
+import AOS from 'aos';
+import 'aos/dist/aos.css'
+import { clipIcon, logoIcon } from '../icons/icons';
+
 
 export default function SinglePollPage() {
     const { id } = useParams();
@@ -14,12 +18,20 @@ export default function SinglePollPage() {
     const [resultButton, setResultButton] = useState(false);
     const [errMessage, setErrMessage] = useState(false);
     const [pollStatus, setPollStatus] = useState(false);
+    const [copied, setCopied] = useState(false);
     const navigate = useNavigate();
 
     const dateFormat = (date) => {
         return moment(date).format('DD-MM-YYYY HH:mm');
     };
     
+    const copyToClipboard = () => {
+        setCopied(false)
+        const url = window.location.href;
+        navigator.clipboard.writeText(url);
+        return setCopied(true);
+    };
+
     const fetchPoll = async() => {
         const fetch = await axios.get(`${urlApi}poll/getOne/${id}`);
         let totalVotes = 0;
@@ -34,7 +46,6 @@ export default function SinglePollPage() {
         fetch.data.totalVotes = totalVotes;
         
         fetch.data.items.forEach((singleItem) => {
-            let perc = (((singleItem.votes * 100) / totalVotes).toFixed(0))
             singleItem.votePercent = `${((singleItem.votes * 100) / totalVotes).toFixed(0)}%`;
             console.log(singleItem.votePercent);
         });
@@ -42,8 +53,10 @@ export default function SinglePollPage() {
         fetch.data.items.forEach((singleItem) => {
             if (singleItem.id === vote) {
                 singleItem.color = 'bg-teal-500 text-white';
+                singleItem.textColor = 'text-white';
             } else {
                 singleItem.color = 'bg-slate-300 text-gray-700';
+                singleItem.textColor = 'text-gray-700';
             }
         });
         if(fetch.data.pollStatus === 2) {
@@ -55,6 +68,7 @@ export default function SinglePollPage() {
     };
 
     useEffect(() => {
+        AOS.init({duration: 1300});
         const polls = JSON.parse(localStorage.getItem(`16uifkg${id}36e21`));
         const ifVoted = JSON.parse(localStorage.getItem(`16uifkg${id}36e21x`));
         if (!polls) {
@@ -105,18 +119,18 @@ export default function SinglePollPage() {
     };
 
   return (
-    <div className='w-full h-screen bg-slate-100 '>
+    <div className='w-full h-screen bg-slate-100'>
         {/* FULL COMPONENT */}
-        <Navbar />
+        
         <div className='w-full h-auto bg-slate-100 pt-[70px] sm:pt-[60px] flex flex-col'>
             {render && (
                 <div className={`w-full h-auto mt-7 px-5`}>
                     {/* CREATED BY AREA */}
-                    <div className='text-2xl font-bold'>
+                    <div className='text-2xl font-bold' data-aos="fade-down">
                         <h1 className='text-gray-600 break-words text-center'>This Poll was created by: <span className='text-teal-700 break-words' >{pollInfo.user.username}</span></h1>
                     </div>
                     {/* POLL STATUS AREA */}
-                    <div className='w-full h-auto flex flex-col justify-center items-center mt-4'>
+                    <div className='w-full h-auto flex flex-col justify-center items-center mt-4' data-aos="fade-down">
                         <h1 className='text-gray-600 text-2xl font-bold'>Poll Status: </h1> 
                     {pollStatus ? (
                         <div className=''>
@@ -127,7 +141,7 @@ export default function SinglePollPage() {
                         )}
                     </div>
                     {/* QUESTION SECTION  */}
-                    <div className='mt-5 z-[-1] [data-aos]:pointer-events:none &.aos-animate pointer-events:auto'>
+                    <div className='mt-5' data-aos="fade-right">
                         <h1 className='text-gray-600 w-auto font-bold text-2xl mb-1'>Poll Question:</h1>
                         <div className='w-full h-auto bg-white p-3 rounded-md'>
                             <h1 className='text-teal-600 font-bold text-2xl'>{pollInfo.pollTitle}</h1>
@@ -136,7 +150,7 @@ export default function SinglePollPage() {
                     {/* VOTE OPTIONS  */}
                     <div> 
                         {!resultButton ? (
-                        <div>
+                        <div data-aos="fade-right">
                             <h1 className='text-gray-600 font-bold text-2xl mt-5 mb-2'>Vote Options:</h1>
                             { pollInfo.items.map((singleItem) => (
                                 <div>
@@ -144,16 +158,24 @@ export default function SinglePollPage() {
                                 </div>
                             ))}
                         </div>
-
                         ) : (
-                            <div>
+                            <div className='' data-aos="fade-right">
                             <h1 className='text-gray-600 font-bold text-2xl mt-5 mb-2'>Results:</h1>
                             { pollInfo.items.map((singleItem) => (
-                                <div className='w-full h-auto relative'>
-                                    {/* <div className='bg-black h-auto w-full z-10 rounded-md opacity-100 absolute'></div> */}
-                                    <div className='bg-black w-full h-full absolute rounded-md' style={{width: singleItem.votePercent}}></div>
-                                    <h1 className={`${singleItem.color} w-full mb-3 px-5 py-2 overflow-hidden truncate... rounded-md text-lg text-start font-bold`}>{singleItem.votes}</h1>
+                                <div className=''>
+                                    <div className='w-full h-auto relative z-0 '>
+                                        <div className='w-full h-full flex justify-end items-center pr-4 absolute'>
+                                            <h1 className={`${singleItem.color} text-xl font-bold text-center` }>{singleItem.votePercent}</h1>
+                                        </div>
+                                        <div className='bg-slate-600 w-full h-full absolute rounded-md opacity-50' style={{width: singleItem.votePercent}}></div>
+                                        <h1 className={`${singleItem.textColor} w-full px-5 pr-[20%] py-2 absolute leading-8 line-clamp-1 overflow-hidden truncate... rounded-md text-lg text-start font-bold line`}>{singleItem.itemTitle}</h1>
+                                        <h1 className={`${singleItem.color} w-full px-5 pr-[20%] py-2 line-clamp-1 leading-8 overflow-hidden truncate... rounded-md text-lg text-start font-bold line`}>{singleItem.itemTitle}</h1>
+                                    </div>
+                                    <div className='w-full h-auto mb-3 flex justify-end items-center px-2'>
+                                        <h1 className='text-xl text-gray-600 font-bold'>votes: {singleItem.votes}</h1>
+                                    </div>
                                 </div>
+                                
                             ))}
                         </div>
                         )}
@@ -167,7 +189,7 @@ export default function SinglePollPage() {
                 </div>
             )}
             {voted ? (
-                <div className={`${resultButton && 'hidden'} w-full h-auto flex flex-col items-center justify-center`}>
+                <div className={`${resultButton && 'hidden'} w-full h-auto flex flex-col items-center justify-center`} >
                     {!pollStatus && (
                         <h1 className='font-bold text-teal-600'>Thank you for your vote!</h1>
                     )}
@@ -178,8 +200,23 @@ export default function SinglePollPage() {
                     <VoteButton func={handleConfirmVote} text={'Confirm Vote'}/>
                 </div>
             )}
-            <h1 className='text-center mt-2 pb-5'>Want to create your own Poll? <span onClick={() => navigate('/register')} className='text-teal-500'>Sign up now.</span></h1>
+            <div className='w-full h-auto flex flex-col justify-center items-center mt-4 bg-slate-100'>
+                <div
+                onClick={copyToClipboard}
+                className='w-full h-auto flex justify-center items-center text-gray-600 hover:text-teal-600 hover:cursor-pointer'
+                >
+                    <h1>{clipIcon}</h1>
+                    {copied ? (
+                        <h1 className='text-lg '>Poll URL copied!</h1>
+                    ) : (
+                        <h1 className='text-lg '>Copy Poll URL to share this Poll</h1>
+                    )}
+                    <h1>{clipIcon}</h1>
+                </div>
+                <h1 className='text-center mt-2 pb-5'>Want to create your own Poll? <span onClick={() => navigate('/register')} className='text-teal-500 hover:cursor-pointer'>Sign up now.</span></h1>
+            </div>
         </div>
+        <Navbar />
     </div>
   )
 }

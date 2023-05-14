@@ -49,7 +49,7 @@ export default function Navbar() {
   return (
     <div className='w-full h-auto fixed top-0 left-0'>
         {/* GREEN NAVBAR */}
-        <div className='w-full h-[70px] sm:h-[60px] bg-teal-500 flex flex-col justify-center absolute items-center sm:justify-center shadow-md z-10'>
+        <div className='w-full h-[70px] sm:h-[60px] bg-teal-500 flex flex-col justify-center absolute items-center sm:justify-center shadow-md z-50'>
             <div className='w-full h-full flex items-center relative sm:justify-between'>
                 {/* SITE NAME */}
                 <div className='w-full h-full sm:w-auto sm:pl-10 flex items-center justify-center'>
@@ -82,9 +82,9 @@ export default function Navbar() {
             </div>
         </div>
         {/* BLACKOUT DIV */}
-        <div onClick={closeNavFunction} className={`bg-black fixed w-screen h-screen z-[-2] ${renderBlack ? 'opacity-70' : 'opacity-0 pointer-events-none'} duration-300 sm:hidden`}></div>
+        <div onClick={closeNavFunction} className={`bg-black fixed w-screen h-screen z-30 ${renderBlack ? 'opacity-70' : 'opacity-0 pointer-events-none'} duration-300 sm:hidden`}></div>
         {/* NAV BUTTONS SMALL SCREEN */}
-            <div className={`w-full h-auto bg-slate-200 sm:hidden absolute ${!openNav ? '-top-[200px]' : 'top-[70px]'} duration-300 ease-out z-0`}> 
+            <div className={`w-full h-auto bg-slate-200 sm:hidden absolute ${!openNav ? '-top-[200px]' : 'top-[70px]'} duration-300 ease-out z-40`}> 
                 {loggedIn ? (
                 buttonsAccount.map((singleButton) => (
                     <div className='w-auto h-auto p-3 pl-5 text-xl font-bold text-gray-600'>
