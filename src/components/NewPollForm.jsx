@@ -72,7 +72,6 @@ const createPollFunction = async(event) => {
   window.location.reload();
 };
 
-
   return (
     <div className=''>
         <form 

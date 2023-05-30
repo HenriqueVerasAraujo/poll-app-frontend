@@ -84,7 +84,7 @@ export default function LoginForm() {
                             <h1 className='text-red-700'>{errMessage}</h1>
                         }
                         <SubmitButton text='Login'/>
-                        <h1 className='text-center mt-2'>Don't have an account? <span onClick={() => navigate('/register')} className='text-teal-500'>Create a new account.</span></h1>
+                        <h1 className='text-center mt-2'>Don't have an account? <span onClick={() => navigate('/register')} className='text-teal-500 cursor-pointer'>Create a new account.</span></h1>
                     </div>
                 </form>
             </div>

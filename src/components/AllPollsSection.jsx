@@ -33,7 +33,7 @@ export default function AllPollsSection() {
   }, [pollsInfo]);
 
   return (
-    <div>
+    <div className='w-full h-auto flex flex-col '>
       {render ? (pollsInfo.map((singlePoll) => (
         <SinglePoll pollInfo={singlePoll}/>
       ))

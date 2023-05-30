@@ -126,8 +126,8 @@ export default function SinglePollPage() {
             {render && (
                 <div className={`w-full h-auto mt-7 px-5`}>
                     {/* CREATED BY AREA */}
-                    <div className='text-2xl font-bold' data-aos="fade-down">
-                        <h1 className='text-gray-600 break-words text-center'>This Poll was created by: <span className='text-teal-700 break-words' >{pollInfo.user.username}</span></h1>
+                    <div data-aos="fade-down">
+                        <h1 className='text-gray-600 break-words text-center text-2xl font-bold'>This Poll was created by: <span className='text-teal-700 break-words' >{pollInfo.user.username}</span></h1>
                     </div>
                     {/* POLL STATUS AREA */}
                     <div className='w-full h-auto flex flex-col justify-center items-center mt-4' data-aos="fade-down">

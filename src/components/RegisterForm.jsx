@@ -91,7 +91,7 @@ export default function RegisterForm() {
                                 <h1 className='text-red-700'>{errMessage}</h1>
                             }
                             <SubmitButton text='Register'/>
-                            <h1 className='text-center mt-2'>Already have an account? <span onClick={() => navigate('/login')} className='text-teal-500'>Sign in to your account.</span></h1>
+                            <h1 className='text-center mt-2'>Already have an account? <span onClick={() => navigate('/login')} className='text-teal-500 cursor-pointer'>Sign in to your account.</span></h1>
                         </div>
                     </form>
                 </div>
