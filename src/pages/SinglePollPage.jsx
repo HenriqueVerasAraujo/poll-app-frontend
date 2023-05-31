@@ -7,7 +7,7 @@ import VoteButton from '../components/common/VoteButton';
 import moment from 'moment';
 import AOS from 'aos';
 import 'aos/dist/aos.css'
-import { clipIcon, logoIcon } from '../icons/icons';
+import { clipIcon } from '../icons/icons';
 
 
 export default function SinglePollPage() {

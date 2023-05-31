@@ -42,6 +42,10 @@ export default function LoginForm() {
     };
 
     useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            navigate('/user');
+        }
         AOS.init({duration: 1300});
     }, []);
 

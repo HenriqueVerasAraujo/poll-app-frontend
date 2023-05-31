@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 
-
 export default function SingleItem({ itemInfo, itemsList, setItemsList }) {
   const [editing, setEditing] = useState(false);
   const [itemText, setItemText] = useState(itemInfo.itemTitle);

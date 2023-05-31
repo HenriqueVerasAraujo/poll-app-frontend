@@ -3,7 +3,6 @@ import axios from 'axios';
 import { urlApi } from '../helpers/urlApi';
 import SingleItem from './common/SingleItem';
 
-
 export default function NewPollForm() {
 
     const [errMessage, setErrMessage] = useState('');
