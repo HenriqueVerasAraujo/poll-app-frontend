@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { urlApi } from '../../helpers/urlApi';
 import moment from 'moment';
 import axios from 'axios';
@@ -6,6 +7,9 @@ import axios from 'axios';
 export default function SinglePoll({ pollInfo }) {
     const [pollStatus, setPollStatus] = useState(pollInfo.pollStatus);
     const [renderButtons, setRenderButton] = useState(false);
+
+    console.log(pollInfo)
+    const navigate = useNavigate();
 
     const dateFormat = (date) => {
         return moment(date).format('DD-MM-YYYY HH:mm');
@@ -42,38 +46,31 @@ export default function SinglePoll({ pollInfo }) {
     }, []);
   
   return (
-    <div className='h-auto w-full mb-10 bg-slate-300 rounded-md flex flex-col border-2 border-gray-700'>
+    <div className='h-auto w-full mb-10 bg-slate-300 rounded-md flex flex-col border-2 border-gray-400 justify-between shadow-xl'>
         {/* TOP PART */}
-        <div className='w-full h-full bg-teal-600'>
-            <h1 className='text-2xl font-bold text-slate-100 text-center py-1'>Poll Question</h1>
+        <div onClick={() => navigate(`/poll/${pollInfo.id}`) } className='w-full h-full bg-teal-500 cursor-pointer'>
+            <h1 className='text-2xl font-bold text-white text-center py-1'>Poll Question</h1>
         </div>
         {/* WHITE PART  */}
-        <div className='w-full h-auto bg-white py-4'>
-            <h1 className='text-gray-700 text-2xl text-center truncate break-words overflow-hidden truncate... '>{pollInfo.pollTitle}</h1>
+        <div onClick={() => navigate(`/poll/${pollInfo.id}`) } className='w-full h-auto bg-slate-100 py-4 cursor-pointer'>
+            <h1 className=' px-2 text-teal-700 text-2xl text-center break-words '>{pollInfo.pollTitle}</h1>
         </div>
         {/* BOTTON PART */}
-        <div className='w-full h-auto flex px-3 py-1  justify-between items-center '>
+        <div onClick={() => navigate(`/poll/${pollInfo.id}`) } className='w-full h-auto flex px-3 py-1 justify-between items-center cursor-pointer'>
             <h1 className='text-lg text-gray-700'>Created at: {dateFormat(pollInfo.createdAt)}</h1>
             {pollStatus === 1 ? (
-                <h1 className='text-lg text-gray-700'>Poll status: <p className='text-teal-800 text-center font-bold text-xl'>Open</p></h1>
-                
+                <h1 className='text-lg text-gray-700'>Poll status: <p className='text-teal-700 text-center font-bold text-xl'>Open</p></h1>
             ) : (
                 <h1 className='text-lg text-gray-700'>Poll status: <p className='text-red-600 text-center font-bold text-xl'>Ended</p></h1>
             )}
         </div>
-        <div className=''>
             {renderButtons && (
                 pollStatus === 1  ? (
-                    <div className='w-full h-auto py-2'>
-                        <button className='w-full bg-black' onClick={updateButtonFunction} type='button'>End Poll</button>
-                    </div>
+                    <button className='w-full h-auto bg-black text-white font-bold py-2 text-xl' onClick={updateButtonFunction} type='button'>End Poll</button>
                 ) : (
-                    <div>
-                        <button className='w-full bg-teal-500 text-white font-bold py-2 text-xl'onClick={deleteButtonFunction} type='button'>Delete Poll</button>
-                    </div>
+                    <button className='w-full h-auto bg-black text-white font-bold py-2 text-xl'onClick={deleteButtonFunction} type='button'>Delete Poll</button>
                 )
             )}
-        </div>
     </div>
   )
 }

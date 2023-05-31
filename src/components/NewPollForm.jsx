@@ -73,60 +73,62 @@ const createPollFunction = async(event) => {
 };
 
   return (
-    <div className=''>
+    <div className='w-full h-auto'>
+      <h1 className='text-gray-600 font-bold text-2xl'>Create new Poll:</h1>
         <form 
         className='flex flex-col'
         >
-            <label>Poll Question: </label>
-            <input 
+            <label className='text-xl text-teal-700 my-2 font-bold'>Poll Question: </label>
+            <input className='rounded-md text-xl px-2 border-2 border-teal-700'
             type="text"
             onChange={pollQuestionHandler}
              />
-         <h1>Vote options:</h1>
+         <h1 className='text-xl text-teal-700 my-2 font-bold'>Vote options:</h1>
          {itemsList.length !== 0 && itemsList.map((singleItem) => (
-          <div>
-            {/* <h1>{ singleItem.itemTitle }</h1>
-            <button type='button' onClick={editButtonFunction}>Edit</button>
-            <button type='button' onClick={ () => deleteButtonFunction(singleItem.itemTitle)}>Delete</button> */}
+          <div className='w-full h-auto mb-5'>
             <SingleItem
             itemInfo={singleItem}
             itemsList={itemsList}
             setItemsList={setItemsList}
             />
-
           </div>
          ))}
          {checkPollItem && (
-          <div>
-            <h1>New vote option:</h1>
+          <div className='w-full h-auto flex flex-col items-center'>
+            <h1 className='text-teal-700 text-xl mb-1'>New vote option:</h1>
             <input
+            className='w-full rounded-md text-xl px-2 border-2 border-teal-700'
             type="text"
             onChange={pollItemHandler}
             />
             <button
+            className='p-1 px-4 text-xl text-center bg-teal-500 text-white font-bold w-1/2 rounded-md mt-2'
             onClick={doneVoteOption}
             type='button'
             >Create
-            {errItem !== '' && (
-              <h1>{errItem}</h1>
-            )}
             </button>
+            {errItem !== '' && (
+              <h1 className='text-lg text-red-600'>{errItem}</h1>
+            )}
           </div>
          )}
 
          <button
+         className='text-teal-700 underline font-bold text-xl my-4'
          onClick={() => setCheckPollItem(true)}
          disabled={checkPollItem}
          >Create a new Vote Option</button>
-
-          <button className='mt-10 bg-green-700' onClick={createPollFunction} type="button">Create Poll</button>
+          <div className='w-full h-auto flex justify-center items-center mb-10'>
+            <button className='w-[90%] h-auto p-3 bg-teal-500 text-white font-bold text-2xl rounded-md mt-3 focus:bg-white focus:border-2 focus:border-teal-500 focus:text-teal-500' onClick={createPollFunction} type="button">Create Poll</button>
+          </div>
         </form>
         {renderErr && (
-            <h1>{errMessage}</h1>
+            <h1 className='text-lg text-red-600 font-bold text-center -mt-8 m-10'>{errMessage}</h1>
         )}
         {renderMessage && (
-            <h1>Poll Created!</h1>
+            <h1 className='text-lg text-teal-700 font-bold'>Poll Created!</h1>
         )}
     </div>
   )
 };
+

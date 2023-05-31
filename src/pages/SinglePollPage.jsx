@@ -131,7 +131,7 @@ export default function SinglePollPage() {
                     </div>
                     {/* POLL STATUS AREA */}
                     <div className='w-full h-auto flex flex-col justify-center items-center mt-4' data-aos="fade-down">
-                        <h1 className='text-gray-600 text-2xl font-bold'>Poll Status: </h1> 
+                        <h1 className='text-gray-600 text-2xl font-bold'>Poll Status: </h1>
                     {pollStatus ? (
                         <div className=''>
                             <h1 className='text-2xl text-red-600 font-bold'>This Poll has ended.</h1>
@@ -144,7 +144,7 @@ export default function SinglePollPage() {
                     <div className='mt-5' data-aos="fade-right">
                         <h1 className='text-gray-600 w-auto font-bold text-2xl mb-1'>Poll Question:</h1>
                         <div className='w-full h-auto bg-white p-3 rounded-md'>
-                            <h1 className='text-teal-600 font-bold text-2xl'>{pollInfo.pollTitle}</h1>
+                            <h1 className='text-teal-600 font-bold break-words text-2xl'>{pollInfo.pollTitle}</h1>
                         </div>
                     </div>
                     {/* VOTE OPTIONS  */}
@@ -159,7 +159,7 @@ export default function SinglePollPage() {
                             ))}
                         </div>
                         ) : (
-                            <div className='' data-aos="fade-right">
+                            <div className='' >
                             <h1 className='text-gray-600 font-bold text-2xl mt-5 mb-2'>Results:</h1>
                             { pollInfo.items.map((singleItem) => (
                                 <div className=''>

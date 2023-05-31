@@ -74,7 +74,7 @@ export default function RegisterForm() {
                         <input className='rounded-md text-lg px-2 border-2 border-teal-700' type="email" {...register('email')} />
                         {errors.email && <span className='text-red-700'>{errors.email.message}</span> }
 
-                        <label className='text-teal-700 mb-1 mt-3' >Username:</label>
+                        <label className='text-teal-700 mb-1 mt-3'>Username:</label>
                         <input className='rounded-md text-lg px-2 border-2 border-teal-700' type="text" {...register('username')} />
                         {errors.username && <span className='text-red-700'>{errors.username.message}</span> }
 

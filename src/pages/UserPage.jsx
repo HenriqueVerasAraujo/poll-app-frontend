@@ -38,20 +38,21 @@ export default function UserPage() {
     <div className='w-full h-screen bg-slate-100'>
       {/* FULL COMPONENT */}
       <Navbar />
-      <div className='w-full h-auto bg-slate-100 pt-[70px] sm:pt-[60px] flex flex-col'>
+      <div className='w-full h-auto bg-slate-100 pt-[70px] sm:pt-[60px] flex flex-col justify-center'>
         {/* USER POLLS SECTION  */}
         <div className='w-full h-auto mt-7 px-5'>
-          <h1 className='text-gray-600 break-words text-2xl font-bold'>Your polls:</h1>
+          <h1 className='text-gray-600 break-words text-2xl font-bold mb-3'>Your polls:</h1>
           <AllPollsSection />
         </div>
         {/* NEW POLL SECTION  */}
-        <div>
-          <button type='button' onClick={ () => setShowForm(true) }>New Poll</button>
-            {showForm && (
-            <div>
-              <NewPollForm />
-            </div>
-            )}
+        <div className='w-full h-auto flex justify-center items-center'>
+          {!showForm ? (
+            <button className='w-[70%] h-auto p-3 bg-teal-500 text-white font-bold text-2xl rounded-md  focus:bg-white focus:border-2 focus:border-teal-500 focus:text-teal-500 mb-10' type='button' onClick={ () => setShowForm(true) }>Create a new Poll</button>
+          ) : (
+          <div className='w-full h-auto px-5'>
+            <NewPollForm />
+          </div>
+          )}
         </div>
       </div>
     </div>
