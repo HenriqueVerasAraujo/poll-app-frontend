@@ -21,6 +21,11 @@ export default function Navbar() {
         {name:'About', to: '/about'},
     ];
 
+    const onClickNavigateFunction = (url) => {
+        document.body.style.overflow = "scroll"
+        navigate(url);
+    }
+
     const verifyLogin = () => {
         const checkToken = localStorage.getItem('token');
         if(checkToken) {
@@ -88,13 +93,13 @@ export default function Navbar() {
                 {loggedIn ? (
                 buttonsAccount.map((singleButton) => (
                     <div className='w-auto h-auto p-3 pl-5 text-xl font-bold text-gray-600'>
-                        <button type='button' onClick={() => navigate(`${singleButton.to}`)}>{singleButton.name}</button>
+                        <button type='button' onClick={() => onClickNavigateFunction(`${singleButton.to}`)}>{singleButton.name}</button>
                     </div>
                 ))
             ):(
                 buttonsFree.map((singleButton) => (
                     <div className='w-auto h-auto p-3 pl-5 text-xl font-bold text-gray-600'>
-                        <button type='button' onClick={() => navigate(`${singleButton.to}`)}>{singleButton.name}</button>
+                        <button type='button' onClick={() => onClickNavigateFunction(`${singleButton.to}`)}>{singleButton.name}</button>
                     </div>
                 ))
             )}
